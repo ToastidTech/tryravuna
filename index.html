@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ravuna — The AI Receptionist That Answers Every Call | by Toastid Tech</title>
+<meta name="description" content="Ravuna is an AI receptionist for small businesses and solopreneurs. She answers your business line 24/7, books callbacks and appointments, transfers callers to you live, and logs every call to your CRM. Call (479) 349-0455 and talk to her right now.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Toastid Tech, LLC">
+<link rel="canonical" href="https://tryravuna.com/">
+<meta property="og:title" content="Ravuna — Your Phone Rings. She Answers.">
+<meta property="og:description" content="An AI receptionist that answers every call, books callbacks and appointments, and logs it all to your CRM. She's live right now: (479) 349-0455.">
+<meta property="og:type" content="website"><meta property="og:url" content="https://tryravuna.com/">
+<meta property="og:site_name" content="Ravuna by Toastid Tech, LLC">
+<meta property="og:image" content="https://tryravuna.com/ravuna-logo.webp">
+<meta property="og:image:alt" content="Ravuna logo — chrome R with an electric-blue sound wave">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ravuna — Your Phone Rings. She Answers.">
+<meta name="twitter:description" content="AI receptionist for small businesses. Answers 24/7, books callbacks, transfers live, logs every call to your CRM. Hear her now: (479) 349-0455.">
+<meta name="twitter:image" content="https://tryravuna.com/ravuna-logo.webp">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="ravuna-logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000000;
+  --bg-2:#050708;
+  --panel:#0A0F16;
+  --panel-2:#0D131C;
+  --border:rgba(90,160,255,0.14);
+  --border-strong:rgba(74,158,255,0.5);
+  --blue:#3B6FF0;
+  --blue-bright:#4A9EFF;
+  --blue-deep:#0E2E63;
+  --steel:#B9C4D4;
+  --text:#F4F7FC;
+  --muted:#7C8CA3;
+  --glow:0 0 24px rgba(74,158,255,0.3);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Manrope', sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  position:relative;
+}
+h1,h2,h3{ font-family:'Chakra Petch', sans-serif; font-weight:700; letter-spacing:-0.01em; }
+.eyebrow{
+  font-family:'JetBrains Mono', monospace;
+  font-size:0.72rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--blue-bright);
+  display:flex; align-items:center; gap:8px;
+}
+.eyebrow::before{ content:''; width:16px; height:1px; background:var(--blue-bright); }
+a{ color:inherit; text-decoration:none; }
+img{ max-width:100%; display:block; }
+.wrap{ max-width:1200px; margin:0 auto; padding:0 32px; }
+svg{ display:block; }
+
+/* ambient glow background */
+.bg-fx{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-color:var(--bg);
+  background-image:
+    radial-gradient(circle at 82% 12%, rgba(74,158,255,0.08), transparent 32%),
+    radial-gradient(circle at 15% 90%, rgba(74,158,255,0.05), transparent 35%);
+}
+
+/* scroll reveal */
+.reveal{ opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in{ opacity:1; transform:translateY(0); }
+.reveal-stagger > *{ opacity:0; transform:translateY(22px); transition:opacity 0.6s ease, transform 0.6s ease; }
+.reveal-stagger.in > *{ opacity:1; transform:translateY(0); }
+.reveal-stagger.in > *:nth-child(1){ transition-delay:0.02s; }
+.reveal-stagger.in > *:nth-child(2){ transition-delay:0.10s; }
+.reveal-stagger.in > *:nth-child(3){ transition-delay:0.18s; }
+.reveal-stagger.in > *:nth-child(4){ transition-delay:0.26s; }
+.reveal-stagger.in > *:nth-child(5){ transition-delay:0.34s; }
+.reveal-stagger.in > *:nth-child(6){ transition-delay:0.42s; }
+
+/* tilt + spotlight on cards */
+.tilt-card{ position:relative; transform-style:preserve-3d; will-change:transform; }
+.tilt-card::before{
+  content:''; position:absolute; inset:0; border-radius:inherit; z-index:2; pointer-events:none;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%), rgba(90,182,255,0.16), transparent 65%);
+  opacity:0; transition:opacity 0.3s;
+}
+.tilt-card:hover::before{ opacity:1; }
+
+/* NAV */
+header{
+  position:sticky; top:0; z-index:50;
+  background:rgba(5,9,16,0.82);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+nav{
+  position:relative;
+  display:flex; align-items:center; justify-content:space-between;
+  max-width:1240px; margin:0 auto; padding:12px 28px;
+}
+.brand{ display:flex; align-items:center; gap:11px; }
+.brand-mark{
+  width:38px; height:38px; border-radius:8px; overflow:hidden;
+  border:1px solid var(--border-strong);
+}
+.brand-mark img{ width:100%; height:100%; object-fit:cover; }
+.brand-name{ font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:0.98rem; letter-spacing:0.22em; }
+.brand-name span{ color:var(--muted); font-weight:400; font-size:0.72rem; display:block; margin-top:-2px; letter-spacing:normal; font-family:'Manrope',sans-serif; }
+.nav-links{ display:flex; gap:30px; align-items:center; }
+.nav-links a{ font-size:0.86rem; color:var(--steel); transition:color 0.2s; padding:6px 0; }
+.nav-links a:hover{ color:var(--blue-bright); }
+.nav-cta{
+  border:1px solid var(--border-strong);
+  background:rgba(74,158,255,0.08);
+  padding:8px 16px; border-radius:8px;
+  font-size:0.82rem; font-weight:600;
+  display:inline-flex; align-items:center; gap:6px;
+  transition:all 0.2s;
+}
+.nav-cta:hover{ background:rgba(74,158,255,0.16); border-color:var(--blue-bright); }
+.menu-toggle{ display:none; background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer; }
+
+/* HERO */
+.hero{ position:relative; z-index:1; padding:56px 0 40px; }
+.hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:32px; align-items:center; }
+.hero h1{
+  font-size:clamp(2.2rem, 4.6vw, 3.3rem);
+  line-height:1.05;
+  margin:14px 0 16px;
+  text-transform:uppercase;
+}
+.hero h1 .accent{ color:var(--blue-bright); }
+.hero p{ color:var(--muted); font-size:0.98rem; line-height:1.6; max-width:480px; margin-bottom:26px; }
+.hero-actions{ display:flex; gap:12px; flex-wrap:wrap; }
+.cta-btn{
+  border:1px solid var(--border-strong);
+  padding:11px 20px; border-radius:8px;
+  font-size:0.86rem; font-weight:600;
+  display:inline-flex; align-items:center; gap:6px;
+  transition:all 0.2s;
+  will-change:transform;
+}
+.cta-btn.filled{ background:var(--blue); border-color:var(--blue); box-shadow:var(--glow); color:#fff; }
+.cta-btn.filled:hover{ background:#2f5fd6; transform:translateY(-1px); }
+.cta-btn:not(.filled){ background:rgba(74,158,255,0.03); }
+.cta-btn:not(.filled):hover{ border-color:var(--blue-bright); background:rgba(74,158,255,0.08); transform:translateY(-1px); }
+.hero-visual{ position:relative; display:flex; justify-content:center; align-items:center; min-height:320px; }
+.hero-visual .ring-outer, .hero-visual .ring-inner{
+  position:absolute; margin:auto; inset:0; border-radius:50%;
+}
+.hero-visual .ring-outer{
+  width:min(420px, 92%); aspect-ratio:1/1;
+  background:radial-gradient(circle, rgba(74,158,255,0.16), transparent 68%);
+  filter:blur(4px);
+  animation:pulse 4.5s ease-in-out infinite;
+}
+.hero-visual .ring-inner{
+  width:min(300px, 66%); aspect-ratio:1/1;
+  border:1px solid rgba(74,158,255,0.22);
+  animation:spin 24s linear infinite;
+}
+.hero-visual .ring-inner::before{
+  content:''; position:absolute; top:-3px; left:50%;
+  width:6px; height:6px; margin-left:-3px;
+  background:var(--blue-bright); border-radius:50%;
+  box-shadow:0 0 10px var(--blue-bright);
+  animation:pulseDot 2s infinite ease-in-out;
+}
+@keyframes pulseDot{ 0%,100%{ transform:scale(1); opacity:1; } 50%{ transform:scale(1.8); opacity:.5; } }
+@keyframes pulse{ 0%,100%{ opacity:0.5; transform:scale(1);} 50%{ opacity:0.9; transform:scale(1.05);} }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+.hero-visual img{
+  position:relative; z-index:1;
+  width:min(400px, 88%);
+  border-radius:18px;
+  filter:drop-shadow(0 0 30px rgba(74,158,255,0.28));
+}
+.pronounce{ font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--muted); letter-spacing:0.08em; margin-top:18px; }
+
+/* LIVE DEMO STRIP */
+.demo-strip{
+  position:relative; z-index:1;
+  background:var(--panel);
+  border:1px solid var(--border-strong);
+  border-radius:14px;
+  padding:22px 26px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;
+  margin-top:26px;
+  box-shadow:0 14px 40px rgba(74,158,255,0.10);
+}
+.status-tag{ font-family:'JetBrains Mono',monospace; font-size:0.66rem; text-transform:uppercase; letter-spacing:0.07em; padding:3px 9px; border-radius:6px; display:inline-flex; align-items:center; gap:7px; }
+.status-live{ background:rgba(74,158,255,0.12); color:var(--blue-bright); border:1px solid var(--border-strong); }
+.live-dot{ width:7px; height:7px; border-radius:50%; background:#43e08a; box-shadow:0 0 8px #43e08a; animation:pulseDot 1.6s infinite ease-in-out; }
+.demo-strip h3{ font-size:1.05rem; margin-bottom:3px; }
+.demo-strip p{ color:var(--muted); font-size:0.86rem; line-height:1.5; }
+.demo-number{
+  font-family:'Chakra Petch',sans-serif; font-weight:700;
+  font-size:clamp(1.3rem, 3.4vw, 1.7rem); color:var(--blue-bright); white-space:nowrap;
+}
+.demo-number:hover{ text-shadow:0 0 18px rgba(74,158,255,0.6); }
+
+section{ position:relative; z-index:1; padding:64px 0; }
+main{ position:relative; z-index:1; }
+.section-head{ display:flex; align-items:end; justify-content:space-between; margin-bottom:26px; flex-wrap:wrap; gap:16px; }
+.section-head h2{ font-size:1.8rem; margin-top:12px; }
+
+/* STEPS */
+.steps-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.step-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:22px;
+  transition:border-color 0.25s, box-shadow 0.25s;
+}
+.step-card:hover{ border-color:var(--border-strong); box-shadow:0 14px 30px rgba(74,158,255,0.12); }
+.step-num{
+  font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--blue-bright);
+  letter-spacing:0.14em; display:block; margin-bottom:12px;
+}
+.step-card h3{ font-size:0.98rem; margin-bottom:6px; }
+.step-card p{ color:var(--muted); font-size:0.84rem; line-height:1.55; }
+
+/* FEATURES */
+.feature-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; }
+.feature-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+  display:flex; flex-direction:column; gap:11px;
+  transition:transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.feature-card:hover{ border-color:var(--border-strong); box-shadow:0 14px 30px rgba(74,158,255,0.12); }
+.icon-badge{
+  width:36px; height:36px; border-radius:9px;
+  background:rgba(74,158,255,0.1);
+  border:1px solid var(--border-strong);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--blue-bright);
+}
+.icon-badge svg{ width:19px; height:19px; }
+.feature-card h3{ font-size:0.98rem; }
+.feature-card p{ color:var(--muted); font-size:0.84rem; line-height:1.55; }
+
+/* PRICING */
+.pricing-wrap{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:28px; align-items:start; }
+.pricing-copy h2{ font-size:1.8rem; margin:12px 0 14px; line-height:1.2; }
+.pricing-copy p{ color:var(--muted); line-height:1.65; margin-bottom:16px; font-size:0.94rem; }
+.price-card{
+  background:var(--panel); border:1px solid var(--border-strong); border-radius:14px;
+  padding:28px; display:flex; flex-direction:column; gap:12px;
+  box-shadow:0 14px 40px rgba(74,158,255,0.10);
+  transition:border-color .2s;
+}
+.price-card:hover{ border-color:var(--blue-bright); }
+.price-card .amount{ font-family:'Chakra Petch',sans-serif; font-size:2.1rem; font-weight:700; color:var(--blue-bright); }
+.price-card .amount span{ font-size:0.9rem; color:var(--muted); font-weight:500; }
+.price-card .setup{ color:var(--steel); font-size:0.9rem; }
+.price-card .setup strong{ color:var(--text); }
+.price-card ul{ list-style:none; display:flex; flex-direction:column; gap:8px; margin:6px 0; }
+.price-card li{ color:var(--steel); font-size:0.87rem; display:flex; gap:8px; align-items:flex-start; }
+.price-card li::before{ content:'✓'; color:var(--blue-bright); font-weight:700; }
+.price-card .fineprint{ color:var(--muted); font-size:0.78rem; line-height:1.5; }
+
+/* FAQ */
+.faq-list{ max-width:860px; display:grid; gap:14px; }
+.faq-item{ border:1px solid var(--border); border-radius:14px; padding:18px 22px; background:var(--panel); }
+.faq-item h3{ margin:0 0 8px; font-size:1.02rem; line-height:1.4; }
+.faq-item p{ margin:0; color:var(--muted); line-height:1.7; font-size:0.92rem; }
+.faq-item a{ color:var(--blue-bright); }
+
+/* FINAL CTA */
+.cta-final{
+  position:relative; overflow:hidden;
+  background:var(--panel);
+  border:1px solid var(--border-strong);
+  border-radius:16px;
+  padding:36px 38px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;
+}
+.cta-final::after{
+  content:''; position:absolute; width:260px; height:260px; border-radius:50%;
+  background:radial-gradient(circle, rgba(74,158,255,0.16), transparent 70%);
+  right:-80px; top:-100px; filter:blur(8px);
+  pointer-events:none;
+}
+.cta-final h2{ font-size:1.4rem; margin-bottom:4px; position:relative; }
+.cta-final p{ color:var(--muted); font-size:0.9rem; position:relative; }
+
+footer{
+  border-top:1px solid var(--border);
+  padding:36px 0; text-align:center;
+  color:var(--muted); font-size:0.85rem; line-height:1.7;
+  position:relative; z-index:1;
+}
+footer .foot-brand{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:10px; }
+footer .foot-brand img{ width:30px; height:30px; border-radius:7px; border:1px solid var(--border-strong); }
+footer a{ color:var(--steel); }
+footer a:hover{ color:var(--blue-bright); }
+
+@media (max-width: 860px){
+  .hero-grid{ grid-template-columns:1fr; }
+  .hero-visual{ order:-1; min-height:250px; }
+  .steps-grid{ grid-template-columns:1fr; }
+  .feature-grid{ grid-template-columns:1fr 1fr; }
+  .pricing-wrap{ grid-template-columns:1fr; }
+  .nav-links{
+    display:none;
+    position:absolute;
+    top:100%; left:0; right:0;
+    flex-direction:column;
+    gap:0;
+    background:rgba(5,9,16,0.97);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+    padding:8px 0;
+  }
+  .nav-links.open{ display:flex; }
+  .nav-links a{ padding:14px 28px; width:100%; }
+  .menu-toggle{ display:block; }
+}
+@media (max-width: 560px){
+  .feature-grid{ grid-template-columns:1fr; }
+  .wrap{ padding:0 20px; }
+  .cta-final{ flex-direction:column; align-items:flex-start; }
+  .demo-strip{ flex-direction:column; align-items:flex-start; }
+  .hero-actions{ display:grid; grid-template-columns:1fr; gap:10px; }
+  .hero-actions .cta-btn{ justify-content:center; min-height:48px; }
+  .nav-cta{ display:none; }
+  section{ padding:44px 0; }
+  .section-head h2{ font-size:1.55rem; }
+}
+@media (hover:none), (pointer:coarse){
+  .tilt-card{ transform:none !important; }
+  .tilt-card::before{ display:none; }
+}
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; }
+  .reveal, .reveal-stagger > *{ opacity:1 !important; transform:none !important; }
+  .tilt-card{ transform:none !important; }
+}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What happens when Ravuna can't answer something?","acceptedAnswer":{"@type":"Answer","text":"She doesn't guess. If a caller asks something outside what she's been set up with, Ravuna takes their name and number and books a callback, so you or your team can follow up with the right answer."}},
+{"@type":"Question","name":"Can Ravuna transfer a caller to me live?","acceptedAnswer":{"@type":"Answer","text":"Yes. When a call needs you — a regular customer, an urgent job, anyone you'd rather handle personally — Ravuna can transfer the caller straight through to you while they're on the line."}},
+{"@type":"Question","name":"What do I need to get started?","acceptedAnswer":{"@type":"Answer","text":"Just your business basics: what you do, your hours, the services you offer, and how you like calls handled. We build Ravuna around that and white-label her to your business — she answers in your name, not ours."}},
+{"@type":"Question","name":"How long until Ravuna is live on my line?","acceptedAnswer":{"@type":"Answer","text":"About two weeks from setup to live. She's built, tested, and tuned on your business information before she ever answers a real caller."}},
+{"@type":"Question","name":"Is my business information private?","acceptedAnswer":{"@type":"Answer","text":"Yes. Ravuna is set up for your business alone, answers using your business's information, and the details from your calls are logged to your CRM — your callers' information goes to you."}}
+]}
+</script>
+</head>
+<body>
+<div class="bg-fx" aria-hidden="true"></div>
+
+<header>
+  <nav>
+    <a class="brand" href="#top" aria-label="Ravuna home">
+      <span class="brand-mark"><img src="ravuna-logo.webp" alt="Ravuna logo"></span>
+      <span class="brand-name">RAVUNA<span>by Toastid Tech, LLC</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#how">How It Works</a>
+      <a href="#features">What She Does</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a class="nav-cta" href="tel:+14793490455">📞 Hear Her Live</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">AI Receptionist · Live Now</div>
+          <h1>Your phone rings.<br><span class="accent">Ravuna answers.</span></h1>
+          <p>Ravuna is an AI receptionist built for small businesses and solopreneurs who can't afford to miss calls. She answers your business line around the clock, books callbacks and appointments, takes messages, and logs every caller to your CRM — in your business's name, not a call center's.</p>
+          <div class="hero-actions">
+            <a class="cta-btn filled" href="tel:+14793490455">📞 Call Her Now — (479) 349-0455</a>
+            <a class="cta-btn" href="#pricing">See Pricing</a>
+          </div>
+          <p class="pronounce">RAVUNA — pronounced re-VAW-na</p>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="ring-outer"></div>
+          <div class="ring-inner"></div>
+          <img src="ravuna-logo.webp" alt="Ravuna logo — chrome R with an electric-blue sound wave">
+        </div>
+      </div>
+
+      <div class="demo-strip reveal">
+        <div>
+          <span class="status-tag status-live"><span class="live-dot"></span> Live Demo</span>
+          <h3 style="margin-top:10px;">She's answering a real business line right now.</h3>
+          <p>No recording, no script-reading demo video. Call the number and talk to Ravuna herself — ask her to book you a callback.</p>
+        </div>
+        <a class="demo-number" href="tel:+14793490455">(479) 349-0455</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow">How It Works</div>
+          <h2>Live on your line in about two weeks</h2>
+        </div>
+      </div>
+      <div class="steps-grid reveal-stagger">
+        <div class="step-card">
+          <span class="step-num">STEP 01</span>
+          <h3>We build her around your business</h3>
+          <p>Tell us what you do, your hours, and how you like calls handled. We set Ravuna up on your business and white-label her to it — she answers with your business's name and your information.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">STEP 02</span>
+          <h3>Your calls come to Ravuna</h3>
+          <p>Day, night, weekends, mid-job with your hands full — she picks up every call, talks with your caller, and handles the conversation the way you would.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">STEP 03</span>
+          <h3>You get the booking and the log</h3>
+          <p>Callbacks and appointments get booked, messages get taken, and every caller's details land in your CRM. Nothing slips through, and you can see every call she took.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" style="padding-top:8px;">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow">What She Does</div>
+          <h2>Everything a great front desk does</h2>
+        </div>
+      </div>
+      <div class="feature-grid reveal-stagger">
+        <div class="feature-card tilt-card">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <h3>Answers every call</h3>
+          <p>Every ring gets picked up — 24/7, including nights, weekends, and the middle of your busiest day. Your callers reach a voice, never voicemail.</p>
+        </div>
+        <div class="feature-card tilt-card">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <h3>Books callbacks &amp; appointments</h3>
+          <p>When a caller is ready, Ravuna books the callback or appointment on the spot instead of leaving you a "call me back" note you'll find too late.</p>
+        </div>
+        <div class="feature-card tilt-card">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+          <h3>Live transfer to you</h3>
+          <p>Some calls should be yours. When one comes in — an urgent job, a regular who needs you — Ravuna transfers the caller straight through to you, live.</p>
+        </div>
+        <div class="feature-card tilt-card">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <h3>Takes messages &amp; intake</h3>
+          <p>Names, numbers, what they need, when to reach them — Ravuna captures the details that matter while the caller is still on the line, not from a voicemail you check at midnight.</p>
+        </div>
+        <div class="feature-card tilt-card">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+          <h3>Logs every call to your CRM</h3>
+          <p>Every caller's details are captured into your CRM, so your follow-up list builds itself and no lead depends on somebody remembering to write it down.</p>
+        </div>
+        <div class="feature-card tilt-card">
+          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+          <h3>Answers in your name</h3>
+          <p>Ravuna is white-labeled to your business. Your callers hear your business's greeting and your business's answers — she works for your shop, not ours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" style="padding-top:8px;">
+    <div class="wrap">
+      <div class="pricing-wrap">
+        <div class="pricing-copy reveal">
+          <div class="eyebrow">Pricing</div>
+          <h2>One flat rate.<br>No per-call math.</h2>
+          <p>A missed call is a customer who dialed your competitor next. Ravuna costs less than a single lost job for most trades and services — and she never calls in sick, never takes a vacation, and never lets the phone ring out.</p>
+          <p>Prefer a human first? The Toastid Tech team is around Monday–Friday, 9 AM–5 PM CT. Or skip the small talk and hear Ravuna herself — she answers the demo line around the clock.</p>
+          <a class="cta-btn" href="tel:+14793490455">📞 (479) 349-0455</a>
+        </div>
+        <div class="price-card tilt-card reveal">
+          <span class="status-tag status-live">White-Label</span>
+          <div class="amount">$250<span>/month</span></div>
+          <p class="setup">plus <strong>$100 setup</strong> — $350 to get started</p>
+          <ul>
+            <li>Answers in your business's name, 24/7</li>
+            <li>Books callbacks and appointments</li>
+            <li>Live transfer to you when a call needs you</li>
+            <li>Messages and caller intake captured</li>
+            <li>Every call logged to your CRM</li>
+            <li>Live in about 2 weeks</li>
+          </ul>
+          <a class="cta-btn filled" href="tel:+14793490455" style="justify-content:center;">Hear Her, Then Decide</a>
+          <p class="fineprint">Flat monthly rate for your Ravuna receptionist. Setup covers building and white-labeling her to your business.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="padding-top:8px;">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow">FAQ</div>
+          <h2>Straight answers</h2>
+        </div>
+      </div>
+      <div class="faq-list reveal-stagger">
+        <div class="faq-item">
+          <h3>What happens when Ravuna can't answer something?</h3>
+          <p>She doesn't guess. If a caller asks something outside what she's been set up with, Ravuna takes their name and number and books a callback, so you or your team can follow up with the right answer.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Can she transfer a caller to me live?</h3>
+          <p>Yes. When a call needs you — a regular customer, an urgent job, anyone you'd rather handle personally — Ravuna can transfer the caller straight through to you while they're on the line.</p>
+        </div>
+        <div class="faq-item">
+          <h3>What do I need to get started?</h3>
+          <p>Just your business basics: what you do, your hours, the services you offer, and how you like calls handled. We build Ravuna around that and white-label her to your business — she answers in your name, not ours.</p>
+        </div>
+        <div class="faq-item">
+          <h3>How long until she's live on my line?</h3>
+          <p>About two weeks from setup to live. She's built, tested, and tuned on your business information before she ever answers a real caller.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Is my business information private?</h3>
+          <p>Yes. Ravuna is set up for your business alone, answers using your business's information, and the details from your calls are logged to your CRM — your callers' information goes to you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section style="padding-top:8px;">
+    <div class="wrap">
+      <div class="cta-final reveal">
+        <div>
+          <h2>Your next caller is deciding in about four rings.</h2>
+          <p>Call the demo line and hear exactly what they'd hear.</p>
+        </div>
+        <a class="cta-btn filled" href="tel:+14793490455">📞 Call Ravuna — (479) 349-0455</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-brand">
+      <img src="ravuna-logo.webp" alt="Ravuna logo">
+      <span style="font-family:'Chakra Petch',sans-serif; letter-spacing:0.22em; color:var(--steel);">RAVUNA</span>
+    </div>
+    <p>by Toastid Tech, LLC — Turning IDEAS into intelligent solutions</p>
+    <p>Ravuna answers 24/7 · Human team: Mon–Fri, 9 AM–5 PM CT · <a href="tel:+14793490455">(479) 349-0455</a></p>
+    <p>© 2026 Toastid Tech, LLC. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Mobile menu ---------- */
+  var toggle = document.getElementById('menuToggle');
+  var links = document.getElementById('navLinks');
+  if(toggle && links){
+    toggle.addEventListener('click', function(){
+      var open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    links.addEventListener('click', function(e){
+      if(e.target.tagName === 'A'){ links.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }
+    });
+  }
+
+  /* ---------- Scroll reveal ---------- */
+  var revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+  if('IntersectionObserver' in window && !reduceMotion){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------- Tilt cards (mirrors the Toastid Tech main site) ---------- */
+  if(!reduceMotion && window.matchMedia('(hover:hover)').matches){
+    document.querySelectorAll('.tilt-card').forEach(function(card){
+      card.addEventListener('mouseenter', function(){
+        /* The reveal-stagger entrance leaves a per-card transition-delay
+           on grid cards; that delay also lags every tilt transform, making
+           later cards feel dead. Once hovered, the entrance is long done,
+           so drop the delay for good. */
+        card.style.transitionDelay = '0s';
+      });
+      card.addEventListener('mousemove', function(e){
+        var rect = card.getBoundingClientRect();
+        var cx = (e.clientX - rect.left) / rect.width;
+        var cy = (e.clientY - rect.top) / rect.height;
+        var rotX = (0.5 - cy) * 8;
+        var rotY = (cx - 0.5) * 8;
+        card.style.transform = 'perspective(700px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg) translateY(-4px)';
+        card.style.setProperty('--mx', (cx * 100) + '%');
+        card.style.setProperty('--my', (cy * 100) + '%');
+      });
+      card.addEventListener('mouseleave', function(){
+        card.style.transform = '';
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>
