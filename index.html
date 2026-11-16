@@ -662,5 +662,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 })();
 </script>
+<!-- Meta Pixel: phone-click = Contact event (call intent) -->
+<script>
+document.addEventListener('click', function (e) {
+  var a = e.target.closest('a[href^="tel:"]');
+  if (!a) return;
+  if (typeof fbq === 'function') {
+    fbq('track', 'Contact', { content_name: 'Call button', phone: a.getAttribute('href').replace('tel:', '') });
+  }
+});
+</script>
 </body>
 </html>
